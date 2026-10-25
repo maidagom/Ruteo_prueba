@@ -62,7 +62,8 @@ score = valor / costo
 ```
 
 - **Valor** (`prioridad.js`): `3 × urgencia + 1 × atraso + 1.5 × peso de clase`.
-  - `urgencia = 10 − diasParaVencer`, solo si el producto vence en 3 días o menos. Si no tiene vencimiento próximo, vale 0.
+  - `urgencia = 10 − diasParaVencer`, si el producto tiene vencimiento (cuanto más cerca, más urgencia). Si no tiene vencimiento próximo, vale 0.
+    La regla dura de urgencia (esperas, reserva y alerta) usa `Dias_Urgente = 3`. El valor, en cambio, pondera gradualmente cualquier vencimiento cercano.
   - `atraso` son los días de visita comprometida que se deben.
   - Peso de clase (`Peso_Clase`): A = 3, B = 2, C = 1.
 - **Costo** (`planificador.js`): minutos desde que el repositor está libre hasta que termina la visita. Incluye traslado, espera y duración de la visita.

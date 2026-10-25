@@ -34,38 +34,38 @@ function planificarRepositor(repo, locales, diaActual) {
             (L) => esUrgente(L) && puedeLlegarA(pos, t, L, finJornada)
         );
         for (const local of pendientes) {
-        const llegada = t + trasladoMin(pos, local);
-        const inicio = inicioPosible(local.ventanas, llegada, local.tiempoVisitaMin);
-        if (inicio === null) continue;
+            const llegada = t + trasladoMin(pos, local);
+            const inicio = inicioPosible(local.ventanas, llegada, local.tiempoVisitaMin);
+            if (inicio === null) continue;
 
-        if (inicio - llegada > esperaMaximaMin(local)) continue;
+            if (inicio - llegada > esperaMaximaMin(local)) continue;
 
-        const salida = inicio + local.tiempoVisitaMin;
-        if (salida > finJornada) continue;
+            const salida = inicio + local.tiempoVisitaMin;
+            if (salida > finJornada) continue;
 
-        const dejaUrgentesVivos = urgentesAlcanzables.every(
+            const dejaUrgentesVivos = urgentesAlcanzables.every(
             (u) => u === local || puedeLlegarA(local, salida, u, finJornada)
-        );
-        if (!dejaUrgentesVivos) continue;
+            );
+            if (!dejaUrgentesVivos) continue;
 
-        const costo = salida - t;
-        const score = valorVisita(local, diaActual) / costo;
+            const costo = salida - t;
+            const score = valorVisita(local, diaActual) / costo;
 
-        if (!mejor || score > mejor.score) {
+            if (!mejor || score > mejor.score) {
             mejor = {local, score, llegada, inicio, salida };
+            }
         }
-    }
-    if (!mejor) break;
+        if (!mejor) break;
 
-    ruta.push({
-        id: mejor.local.id,
-        llegada: hhmm(mejor.llegada),
-        inicio: hhmm(mejor.inicio),
-        salida: hhmm(mejor.salida),
-    });
-    t = mejor.salida;
-    pos = mejor.local;
-    pendientes.delete(mejor.local);
+        ruta.push({
+            id: mejor.local.id,
+            llegada: hhmm(mejor.llegada),
+            inicio: hhmm(mejor.inicio),
+            salida: hhmm(mejor.salida),
+        });
+        t = mejor.salida;
+        pos = mejor.local;
+        pendientes.delete(mejor.local);
     }
 
     return {
