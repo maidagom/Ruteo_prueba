@@ -5,7 +5,7 @@ function valorVisita(local, diaActual) {
       local.diasParaVencer == null ? 0 : Math.max(0, 10 - local.diasParaVencer);
     const atraso = Math.max(
         0,
-        diaActual - local.ultimaVisitaDia - local.frecuenciasDias
+        diaActual - local.ultimaVisitaDia - local.frecuenciaDias
     );
     return 3 * urgencia + 1 * atraso + 1.5 * Peso_Clase[local.clase];
 }
