@@ -33,7 +33,7 @@ function planificarRepositor(repo, locales, diaActual) {
         const urgentesAlcanzables = [...pendientes].filter(
             (L) => esUrgente(L) && puedeLlegarA(pos, t, L, finJornada)
         );
-    for (const local of pendientes) {
+        for (const local of pendientes) {
         const llegada = t + trasladoMin(pos, local);
         const inicio = inicioPosible(local.ventanas, llegada, local.tiempoVisitaMin);
         if (inicio === null) continue;
