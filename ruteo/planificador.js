@@ -75,16 +75,22 @@ function planificarRepositor(repo, locales, diaActual) {
     };
 }
 
-function planificarEquipo(repositores, locales, diaActual) {
-    let pool = locales.slice();
-    const planes = [];
-
-    for (const repo of repositores) {
-        const plan = planificarRepositor(repo, pool, diaActual);
-        const visitados = new Set(plan.ruta.map((r) => r.id));
-        pool = pool.filter((L) => !visitados.has(L.id));
-        planes.push(plan);
+function dividirPorZona(locales, cantidad) {
+    const ordenados = locales.slice().sort((a, b) => a.lon - b.lon);
+    const tamano = Math.ceil(ordenados.length / cantidad);
+    const grupos = [];
+    for (let i = 0; i < cantidad; i++) {
+        grupos.push(ordenados.slice(i * tamano, (i + 1) * tamano));
     }
+    return grupos;
+}
+
+function planificarEquipo(repositores, locales, diaActual) {
+    const grupos = dividirPorZona(locales, repositores.length);
+
+    const planes = repositores.map((repo, i) =>
+        planificarRepositor(repo, grupos[i], diaActual)
+    );
 
     const visitadosHoy = new Set(planes.flatMap((p) => p.ruta.map((r) => r.id)));
     const urgentesSinVisitar = locales.filter(
@@ -92,11 +98,12 @@ function planificarEquipo(repositores, locales, diaActual) {
     );
     if (urgentesSinVisitar.length > 0) {
         console.log(
-           '\n⚠ locales urgentes sin visitar: ${urgentesSinVisitar.map((L) => L.id).join(", ")}' 
+            `\n⚠ Locales urgentes sin visitar: ${urgentesSinVisitar.map((L) => L.id).join(", ")}`
         );
     }
-    
-    return { planes, sinAsignar: pool.map((L) => L.id) };
+
+    const sinAsignar = planes.flatMap((p) => p.sinVisitar);
+    return { planes, sinAsignar };
 }
 
 module.exports = { planificarRepositor, planificarEquipo };
