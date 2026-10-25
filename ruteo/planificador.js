@@ -44,7 +44,7 @@ function planificarRepositor(repo, locales, diaActual) {
             if (salida > finJornada) continue;
 
             const dejaUrgentesVivos = urgentesAlcanzables.every(
-            (u) => u === local || puedeLlegarA(local, salida, u, finJornada)
+                (u) => u === local || puedeLlegarA(local, salida, u, finJornada)
             );
             if (!dejaUrgentesVivos) continue;
 
@@ -52,7 +52,7 @@ function planificarRepositor(repo, locales, diaActual) {
             const score = valorVisita(local, diaActual) / costo;
 
             if (!mejor || score > mejor.score) {
-            mejor = {local, score, llegada, inicio, salida };
+                mejor = {local, score, llegada, inicio, salida };
             }
         }
         if (!mejor) break;
