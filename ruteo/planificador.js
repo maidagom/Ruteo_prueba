@@ -102,6 +102,9 @@ function planificarEquipo(repositores, locales, diaActual) {
         );
     }
 
+    const cerrados = locales.filter((L) => L.cerrado).map((L) => L.id);
+    console.log(`Cerrados hoy: ${cerrados.join(", ")}`);
+
     const sinAsignar = planes.flatMap((p) => p.sinVisitar);
     return { planes, sinAsignar };
 }
